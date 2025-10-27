@@ -1,5 +1,5 @@
 /**
- * User Data Transfer Object
+ * User DTO
  * Excludes sensitive information when sending user data to frontend
  */
 
