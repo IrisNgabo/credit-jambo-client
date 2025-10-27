@@ -77,7 +77,7 @@ app.use((err, req, res, next) => {
 });
 
 // 404 handler
-app.use('*', (req, res) => {
+app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
@@ -87,9 +87,9 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('✅ Database connection established successfully.');
     
-    // Sync database (create tables if they don't exist)
-    await sequelize.sync({ alter: true });
-    console.log('✅ Database synchronized successfully.');
+    // Don't sync database - using existing admin database
+    // await sequelize.sync({ alter: true });
+    console.log('✅ Using existing database structure.');
     
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
