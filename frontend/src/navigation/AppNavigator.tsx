@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer , NavigatorScreenParams} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,9 +15,9 @@ import WithdrawScreen from '../pages/WithdrawScreen';
 import HistoryScreen from '../pages/HistoryScreen';
 import ProfileScreen from '../pages/ProfileScreen';
 
-// Types
+
 export type RootStackParamList = {
-  Auth: undefined;
+  Auth: NavigatorScreenParams<AuthStackParamList>;
   Main: undefined;
 };
 
@@ -33,6 +33,8 @@ export type MainTabParamList = {
   History: undefined;
   Profile: undefined;
 };
+
+
 
 const Stack = createStackNavigator<RootStackParamList>();
 const AuthStack = createStackNavigator<AuthStackParamList>();
@@ -112,8 +114,22 @@ const MainNavigator = () => {
 
 // Root Navigator
 const AppNavigator = () => {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-  const user = useSelector((state: RootState) => state.auth.user);
+  const isAuthenticated = useSelector((state: RootState) => {
+    const auth = state.auth.isAuthenticated;
+    // Ensure isAuthenticated is always a boolean
+    return typeof auth === 'boolean' ? auth : false;
+  });
+  const user = useSelector((state: RootState) => {
+    const userData = state.auth.user;
+    if (userData && typeof userData.isVerified === 'string') {
+      // Ensure isVerified is always a boolean
+      return {
+        ...userData,
+        isVerified: userData.isVerified === 'true'
+      };
+    }
+    return userData;
+  });
 
   return (
     <NavigationContainer>
