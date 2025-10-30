@@ -5,6 +5,7 @@ const { hashPassword, verifyPassword, generateDeviceId } = require('../utils/pas
 const { generateToken } = require('../utils/jwtUtils');
 const { userDTO } = require('../dtos/userDTO');
 const { authenticateToken } = require('../middlewares/authMiddleware');
+const { Op } = require('sequelize');
 
 const router = express.Router();
 
@@ -211,7 +212,7 @@ router.post('/login', [
     }
 
     // Update last login
-    await user.update({ lastLoginAt: new Date() });
+    await user.update({ lastLogin: new Date() });
 
     // Generate JWT token
     const token = generateToken(user);
@@ -291,6 +292,88 @@ router.post('/logout', authenticateToken, async (req, res) => {
       message: 'Logout failed',
       error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
     });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/pending:
+ *   get:
+ *     summary: List users pending device verification
+ *     tags: [Authentication]
+ *     parameters:
+ *       - in: query
+ *         name: q
+ *         schema:
+ *           type: string
+ *         description: Optional search by name or email
+ *     responses:
+ *       200:
+ *         description: List of pending users
+ */
+router.get('/pending', async (req, res) => {
+  try {
+    const { q } = req.query;
+    const where = { isVerified: false };
+    if (q) {
+      where[Op.or] = [
+        { name: { [Op.iLike]: `%${q}%` } },
+        { email: { [Op.iLike]: `%${q}%` } }
+      ];
+    }
+    const users = await User.findAll({
+      where,
+      order: [['createdAt', 'DESC']],
+      attributes: ['id', 'name', 'email', 'deviceId', 'isVerified', 'createdAt']
+    });
+    res.json({ users });
+  } catch (error) {
+    console.error('List pending users error:', error);
+    res.status(500).json({ message: 'Failed to fetch pending users' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/auth/verify:
+ *   patch:
+ *     summary: Verify a user's device
+ *     tags: [Authentication]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [ userId ]
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               deviceId:
+ *                 type: string
+ *                 description: Optional. Override or set deviceId to approve
+ *     responses:
+ *       200:
+ *         description: User verified
+ */
+router.patch('/verify', async (req, res) => {
+  try {
+    const { userId, deviceId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ message: 'userId is required' });
+    }
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    await user.update({
+      isVerified: true,
+      ...(deviceId ? { deviceId } : {})
+    });
+    res.json({ message: 'User verified', user: userDTO(user) });
+  } catch (error) {
+    console.error('Verify user error:', error);
+    res.status(500).json({ message: 'Failed to verify user' });
   }
 });
 
