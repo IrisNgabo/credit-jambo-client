@@ -9,10 +9,19 @@ interface User {
   email: string;
   balance: number;
   isVerified: boolean;
-  lastLoginAt?: string;
+  lastLogin?: string;
   createdAt: string;
   updatedAt: string;
 }
+
+// Helper function to ensure boolean fields are properly typed
+const ensureBooleanFields = (user: any): User => {
+  if (!user) return user;
+  return {
+    ...user,
+    isVerified: typeof user.isVerified === 'string' ? user.isVerified === 'true' : Boolean(user.isVerified)
+  };
+};
 
 interface AuthState {
   user: User | null;
@@ -80,9 +89,10 @@ export const loadStoredAuth = createAsyncThunk(
       const userData = await SecureStore.getItemAsync('userData');
       
       if (token && userData) {
+        const parsedUser = JSON.parse(userData);
         return {
           token,
-          user: JSON.parse(userData)
+          user: ensureBooleanFields(parsedUser)
         };
       }
       
@@ -109,6 +119,20 @@ export const logoutUser = createAsyncThunk(
       await SecureStore.deleteItemAsync('authToken');
       await SecureStore.deleteItemAsync('userData');
       return null;
+    }
+  }
+);
+
+export const clearAuthCache = createAsyncThunk(
+  'auth/clearCache',
+  async (_, { rejectWithValue }) => {
+    try {
+      // Clear stored data
+      await SecureStore.deleteItemAsync('authToken');
+      await SecureStore.deleteItemAsync('userData');
+      return null;
+    } catch (error: any) {
+      return rejectWithValue('Failed to clear authentication cache');
     }
   }
 );
@@ -159,7 +183,7 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.user;
+        state.user = ensureBooleanFields(action.payload.user);
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
@@ -178,7 +202,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.user;
+        state.user = ensureBooleanFields(action.payload.user);
         state.token = action.payload.token;
         state.isAuthenticated = true;
         state.error = null;
@@ -197,7 +221,7 @@ const authSlice = createSlice({
       .addCase(loadStoredAuth.fulfilled, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.user = action.payload.user;
+          state.user = ensureBooleanFields(action.payload.user);
           state.token = action.payload.token;
           state.isAuthenticated = true;
         }
@@ -219,10 +243,19 @@ const authSlice = createSlice({
     // Refresh profile
     builder
       .addCase(refreshUserProfile.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = ensureBooleanFields(action.payload);
       })
       .addCase(refreshUserProfile.rejected, (state, action) => {
         state.error = action.payload as string;
+      });
+
+    // Clear cache
+    builder
+      .addCase(clearAuthCache.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+        state.error = null;
       });
   },
 });
