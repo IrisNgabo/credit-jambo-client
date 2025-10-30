@@ -79,7 +79,7 @@ export const hideAllToasts = () => {
 export const showDepositSuccess = (amount) => {
   showSuccessToast(
     'Deposit Successful',
-    `$${amount.toFixed(2)} has been added to your account`
+    `${new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(amount)} has been added to your account`
   );
 };
 
@@ -90,7 +90,7 @@ export const showDepositSuccess = (amount) => {
 export const showWithdrawalSuccess = (amount) => {
   showSuccessToast(
     'Withdrawal Successful',
-    `$${amount.toFixed(2)} has been withdrawn from your account`
+    `${new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(amount)} has been withdrawn from your account`
   );
 };
 
@@ -112,7 +112,7 @@ export const showWithdrawalFailure = (reason) => {
 export const showLowBalanceWarning = (balance) => {
   showWarningToast(
     'Low Balance Alert',
-    `Your balance is $${balance.toFixed(2)}. Consider adding funds.`
+    `Your balance is ${new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(balance)}. Consider adding funds.`
   );
 };
 
