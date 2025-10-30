@@ -48,7 +48,7 @@ const User = sequelize.define('User', {
       min: 0
     }
   },
-  lastLoginAt: {
+  lastLogin: {
     type: DataTypes.DATE,
     allowNull: true
   },
