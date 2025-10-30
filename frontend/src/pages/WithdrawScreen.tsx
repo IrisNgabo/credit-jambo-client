@@ -11,6 +11,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { showWithdrawalSuccess } from '../utils/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { withdrawMoney, clearError } from '../store/slices/savingsSlice';
@@ -30,8 +32,8 @@ const WithdrawScreen = () => {
       return;
     }
 
-    if (withdrawAmount < 0.01) {
-      Alert.alert('Error', 'Minimum withdrawal amount is $0.01');
+    if (withdrawAmount < 1) {
+      Alert.alert('Error', 'Minimum withdrawal amount is RWF 1');
       return;
     }
 
@@ -43,7 +45,7 @@ const WithdrawScreen = () => {
     // Show confirmation dialog
     Alert.alert(
       'Confirm Withdrawal',
-      `Are you sure you want to withdraw $${withdrawAmount.toFixed(2)}?`,
+      `Are you sure you want to withdraw ${new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(withdrawAmount)}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -57,11 +59,7 @@ const WithdrawScreen = () => {
               }));
 
               if (withdrawMoney.fulfilled.match(result)) {
-                Alert.alert(
-                  'Success',
-                  `Withdrawal of $${withdrawAmount.toFixed(2)} successful!`,
-                  [{ text: 'OK' }]
-                );
+                showWithdrawalSuccess(withdrawAmount);
                 setAmount('');
                 setDescription('');
               } else if (withdrawMoney.rejected.match(result)) {
@@ -93,6 +91,7 @@ const WithdrawScreen = () => {
   }, [dispatch]);
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -107,7 +106,7 @@ const WithdrawScreen = () => {
           <View style={styles.balanceCard}>
             <Text style={styles.balanceLabel}>Available Balance</Text>
             <Text style={styles.balanceAmount}>
-              ${balance.toFixed(2)}
+              {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF'}).format(balance)}
             </Text>
           </View>
 
@@ -121,7 +120,7 @@ const WithdrawScreen = () => {
               keyboardType="decimal-pad"
               editable={!isLoading}
             />
-            <Text style={styles.inputHint}>Maximum withdrawal: ${balance.toFixed(2)}</Text>
+            <Text style={styles.inputHint}>Maximum withdrawal: {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(balance)}</Text>
           </View>
 
           <View style={styles.quickAmountsContainer}>
@@ -145,7 +144,7 @@ const WithdrawScreen = () => {
                       quickAmount > balance && styles.quickAmountTextDisabled,
                     ]}
                   >
-                    ${quickAmount}
+                    RWF{quickAmount}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -155,7 +154,7 @@ const WithdrawScreen = () => {
               onPress={setMaxAmount}
               disabled={isLoading || balance === 0}
             >
-              <Text style={styles.maxButtonText}>Max (${balance.toFixed(2)})</Text>
+              <Text style={styles.maxButtonText}>Max ({new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(balance)})</Text>
             </TouchableOpacity>
           </View>
 
@@ -209,6 +208,7 @@ const WithdrawScreen = () => {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

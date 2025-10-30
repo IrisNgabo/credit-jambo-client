@@ -94,7 +94,7 @@ const RegisterScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
           <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.subtitle}>Join Credit Jambo today!</Text>
+          <Text style={styles.subtitle}>Join SMA today!</Text>
         </View>
 
         <View style={styles.form}>

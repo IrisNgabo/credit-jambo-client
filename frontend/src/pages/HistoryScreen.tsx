@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
@@ -58,9 +59,10 @@ const HistoryScreen = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-RW', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'RWF',
+      // currencyDisplay: 'narrowSymbol',
     }).format(amount);
   };
 
@@ -141,6 +143,7 @@ const HistoryScreen = () => {
   );
 
   return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Transaction History</Text>
@@ -164,6 +167,7 @@ const HistoryScreen = () => {
         showsVerticalScrollIndicator={false}
       />
     </View>
+    </SafeAreaView>
   );
 };
 

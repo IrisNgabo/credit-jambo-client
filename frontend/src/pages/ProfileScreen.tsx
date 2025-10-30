@@ -7,6 +7,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { RootState, AppDispatch } from '../store';
@@ -35,9 +36,10 @@ const ProfileScreen = () => {
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-RW', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'RWF',
+      // currencyDisplay: 'narrowSymbol',
     }).format(amount);
   };
 
@@ -50,7 +52,8 @@ const ProfileScreen = () => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <View style={styles.header}>
         <View style={styles.avatar}>
           <Ionicons name="person" size={40} color="#007AFF" />
@@ -91,11 +94,11 @@ const ProfileScreen = () => {
             </Text>
           </View>
 
-          {user?.lastLoginAt && (
+          {user?.lastLogin && (
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Last Login</Text>
               <Text style={styles.infoValue}>
-                {formatDate(user.lastLoginAt)}
+                {formatDate(user.lastLogin)}
               </Text>
             </View>
           )}
@@ -149,17 +152,25 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.footer}>
-        <Text style={styles.footerText}>Credit Jambo v1.0.0</Text>
-        <Text style={styles.footerText}>© 2024 All rights reserved</Text>
+        <Text style={styles.footerText}>Savings Management </Text>
+        <Text style={styles.footerText}>© 2025 All rights reserved</Text>
       </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+  },
+  contentContainer: {
+    paddingTop: 8,
   },
   header: {
     backgroundColor: '#fff',

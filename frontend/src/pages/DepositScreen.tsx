@@ -11,6 +11,8 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { showDepositSuccess } from '../utils/notifications';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { depositMoney, clearError } from '../store/slices/savingsSlice';
@@ -30,8 +32,8 @@ const DepositScreen = () => {
       return;
     }
 
-    if (depositAmount < 0.01) {
-      Alert.alert('Error', 'Minimum deposit amount is $0.01');
+    if (depositAmount < 1) {
+      Alert.alert('Error', 'Minimum deposit amount is RWF 1');
       return;
     }
 
@@ -42,11 +44,7 @@ const DepositScreen = () => {
       }));
 
       if (depositMoney.fulfilled.match(result)) {
-        Alert.alert(
-          'Success',
-          `Deposit of $${depositAmount.toFixed(2)} successful!`,
-          [{ text: 'OK' }]
-        );
+        showDepositSuccess(depositAmount);
         setAmount('');
         setDescription('');
       } else if (depositMoney.rejected.match(result)) {
@@ -68,6 +66,7 @@ const DepositScreen = () => {
   }, [dispatch]);
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -82,7 +81,7 @@ const DepositScreen = () => {
           <View style={styles.balanceCard}>
             <Text style={styles.balanceLabel}>Current Balance</Text>
             <Text style={styles.balanceAmount}>
-              ${balance.toFixed(2)}
+              {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF' }).format(balance)}
             </Text>
           </View>
 
@@ -96,7 +95,7 @@ const DepositScreen = () => {
               keyboardType="decimal-pad"
               editable={!isLoading}
             />
-            <Text style={styles.inputHint}>Minimum deposit: $0.01</Text>
+            <Text style={styles.inputHint}>Minimum deposit: RWF 1</Text>
           </View>
 
           <View style={styles.quickAmountsContainer}>
@@ -118,7 +117,7 @@ const DepositScreen = () => {
                       amount === quickAmount.toString() && styles.quickAmountTextActive,
                     ]}
                   >
-                    ${quickAmount}
+                    {new Intl.NumberFormat('en-RW', { style: 'currency', currency: 'RWF', currencyDisplay: 'narrowSymbol' }).format(quickAmount)}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -158,6 +157,7 @@ const DepositScreen = () => {
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

@@ -73,7 +73,7 @@ const LoginScreen = () => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>Credit Jambo</Text>
+          <Text style={styles.title}>SMA</Text>
           <Text style={styles.subtitle}>Welcome back!</Text>
         </View>
 

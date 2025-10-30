@@ -16,6 +16,7 @@ import { RootState, AppDispatch } from '../store';
 import { fetchBalance, fetchTransactionHistory } from '../store/slices/savingsSlice';
 import { refreshUserProfile } from '../store/slices/authSlice';
 import { MainTabParamList } from '../navigation/AppNavigator';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type DashboardScreenNavigationProp = BottomTabNavigationProp<MainTabParamList>;
 
@@ -50,12 +51,16 @@ const DashboardScreen = () => {
     setRefreshing(false);
   };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+ 
+
+   const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-RW', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'RWF',
+      currencyDisplay: 'narrowSymbol',
     }).format(amount);
   };
+
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -87,6 +92,7 @@ const DashboardScreen = () => {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#f5f5f5' }}>
     <ScrollView
       style={styles.container}
       refreshControl={
@@ -206,6 +212,7 @@ const DashboardScreen = () => {
         </View>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
