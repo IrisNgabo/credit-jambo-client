@@ -2,7 +2,7 @@
 
 A comprehensive savings management system with secure authentication, device verification, and real-time transaction tracking.
 
-## 🚀 Features
+##  Features
 
 ### Backend (Node.js + Express + PostgreSQL)
 - **Secure Authentication**: SHA-512 password hashing with JWT tokens
@@ -22,7 +22,7 @@ A comprehensive savings management system with secure authentication, device ver
 - **Real-time Updates**: Live balance and transaction updates
 - **Navigation**: Bottom tabs with stack navigation
 
-## 🏗️ Architecture
+##  Architecture
 
 ```
 credit-jambo-client/
@@ -48,7 +48,7 @@ credit-jambo-client/
 └── README.md              # This file
 ```
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 - Node.js (v16+)
@@ -85,7 +85,7 @@ cp .env.example .env
 npm start
 ```
 
-## 🔐 Security Features
+##  Security Features
 
 - **SHA-512 Password Hashing**: Secure password storage
 - **JWT Authentication**: Stateless token-based auth
@@ -95,7 +95,7 @@ npm start
 - **CORS Protection**: Cross-origin request security
 - **Secure Headers**: Helmet.js security middleware
 
-## 📱 User Flow
+##  User Flow
 
 1. **Registration**: User creates account with device ID
 2. **Device Verification**: Admin verifies the device
@@ -103,7 +103,7 @@ npm start
 4. **Savings Management**: Deposit, withdraw, view balance
 5. **Transaction History**: Complete audit trail
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Backend tests
@@ -116,7 +116,7 @@ cd frontend
 npm test
 ```
 
-## 📊 API Endpoints
+##  API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - User registration
@@ -130,7 +130,7 @@ npm test
 - `GET /api/savings/balance` - Get current balance
 - `GET /api/savings/history` - Get transaction history
 
-## 🐳 Docker Commands
+##  Docker Commands
 
 ```bash
 # Build and start all services
@@ -149,7 +149,7 @@ docker-compose up --build
 docker-compose exec backend npm test
 ```
 
-## 📝 Environment Variables
+##  Environment Variables
 
 ### Backend (.env)
 ```env
@@ -170,23 +170,5 @@ EXPO_PUBLIC_API_URL=http://localhost:4000/api
 EXPO_PUBLIC_APP_NAME=Credit Jambo
 ```
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Ensure all tests pass
-6. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the ISC License.
-
-## 📞 Support
-
-For support and questions:
-- Check the documentation in `/backend/README.md` and `/frontend/README.md`
-- Review existing issues
-- Create a new issue with detailed description
-Savings Management System Client side
+**Built with ❤️ by Iris NGABO**
