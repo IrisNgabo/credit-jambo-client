@@ -15,34 +15,33 @@ import { logoutUser } from '../store/slices/authSlice';
 
 const ProfileScreen = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { user, balance } = useSelector((state: RootState) => ({
-    user: state.auth.user,
-    balance: state.savings.balance,
-  }));
 
+  // Use separate selectors to avoid returning a new object each render
+  // — this removes the "selector returned a different result" warning
+  const user = useSelector((state: RootState) => state.auth.user);
+  const balance = useSelector((state: RootState) => state.savings.balance);
+
+  // Confirm logout with an alert before dispatching
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: () => dispatch(logoutUser()),
-        },
-      ]
-    );
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: () => dispatch(logoutUser()),
+      },
+    ]);
   };
 
+  // Format Rwandan Franc currency
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-RW', {
       style: 'currency',
       currency: 'RWF',
-      // currencyDisplay: 'narrowSymbol',
     }).format(amount);
   };
 
+  // Format ISO date strings into readable dates
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -54,107 +53,117 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
-        <View style={styles.avatar}>
-          <Ionicons name="person" size={40} color="#007AFF" />
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.avatar}>
+            <Ionicons name="person" size={40} color="#007AFF" />
+          </View>
+          <Text style={styles.name}>{user?.name || 'User'}</Text>
+          <Text style={styles.email}>{user?.email}</Text>
         </View>
-        <Text style={styles.name}>{user?.name || 'User'}</Text>
-        <Text style={styles.email}>{user?.email}</Text>
-      </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Information</Text>
-        
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Account Status</Text>
-            <View style={styles.statusContainer}>
-              <View style={[
-                styles.statusDot,
-                { backgroundColor: user?.isVerified ? '#4CAF50' : '#FF9800' }
-              ]} />
-              <Text style={[
-                styles.statusText,
-                { color: user?.isVerified ? '#4CAF50' : '#FF9800' }
-              ]}>
-                {user?.isVerified ? 'Verified' : 'Pending Verification'}
-              </Text>
-            </View>
-          </View>
+        {/* Account Information */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Account Information</Text>
 
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Current Balance</Text>
-            <Text style={styles.balanceText}>{formatCurrency(balance)}</Text>
-          </View>
-
-          <View style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Member Since</Text>
-            <Text style={styles.infoValue}>
-              {user?.createdAt ? formatDate(user.createdAt) : 'N/A'}
-            </Text>
-          </View>
-
-          {user?.lastLogin && (
+          <View style={styles.infoCard}>
             <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Last Login</Text>
+              <Text style={styles.infoLabel}>Account Status</Text>
+              <View style={styles.statusContainer}>
+                <View
+                  style={[
+                    styles.statusDot,
+                    { backgroundColor: user?.isVerified ? '#4CAF50' : '#FF9800' },
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.statusText,
+                    { color: user?.isVerified ? '#4CAF50' : '#FF9800' },
+                  ]}
+                >
+                  {user?.isVerified ? 'Verified' : 'Pending Verification'}
+                </Text>
+              </View>
+            </View>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Current Balance</Text>
+              <Text style={styles.balanceText}>{formatCurrency(balance)}</Text>
+            </View>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Member Since</Text>
               <Text style={styles.infoValue}>
-                {formatDate(user.lastLogin)}
+                {user?.createdAt ? formatDate(user.createdAt) : 'N/A'}
               </Text>
             </View>
-          )}
+
+            {user?.lastLogin && (
+              <View style={styles.infoRow}>
+                <Text style={styles.infoLabel}>Last Login</Text>
+                <Text style={styles.infoValue}>{formatDate(user.lastLogin)}</Text>
+              </View>
+            )}
+          </View>
         </View>
-      </View>
 
-      {!user?.isVerified && (
-        <View style={styles.verificationCard}>
-          <Ionicons name="warning" size={24} color="#FF9800" />
-          <Text style={styles.verificationTitle}>Device Verification Required</Text>
-          <Text style={styles.verificationText}>
-            Your device needs to be verified by an admin before you can access all features.
-            Please contact support for assistance.
-          </Text>
+        {/* Verification notice */}
+        {!user?.isVerified && (
+          <View style={styles.verificationCard}>
+            <Ionicons name="warning" size={24} color="#FF9800" />
+            <View>
+              <Text style={styles.verificationTitle}>Device Verification Required</Text>
+              <Text style={styles.verificationText}>
+                Your device needs to be verified by an admin before you can access all features.
+                Please contact support for assistance.
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Account Actions */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Account Actions</Text>
+
+          <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="settings" size={20} color="#007AFF" />
+            <Text style={styles.actionText}>Settings</Text>
+            <Ionicons name="chevron-forward" size={16} color="#ccc" />
+          </TouchableOpacity>
+
+          {/* <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="help-circle" size={20} color="#007AFF" />
+            <Text style={styles.actionText}>Help & Support</Text>
+            <Ionicons name="chevron-forward" size={16} color="#ccc" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="shield-checkmark" size={20} color="#007AFF" />
+            <Text style={styles.actionText}>Privacy Policy</Text>
+            <Ionicons name="chevron-forward" size={16} color="#ccc" />
+          </TouchableOpacity> */}
+
+          {/* <TouchableOpacity style={styles.actionButton}>
+            <Ionicons name="document-text" size={20} color="#007AFF" />
+            <Text style={styles.actionText}>Terms of Service</Text>
+            <Ionicons name="chevron-forward" size={16} color="#ccc" />
+          </TouchableOpacity> */}
         </View>
-      )}
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account Actions</Text>
-        
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="settings" size={20} color="#007AFF" />
-          <Text style={styles.actionText}>Settings</Text>
-          <Ionicons name="chevron-forward" size={16} color="#ccc" />
-        </TouchableOpacity>
+        {/* Logout */}
+        <View style={styles.section}>
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Ionicons name="log-out" size={20} color="#F44336" />
+            <Text style={styles.logoutText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="help-circle" size={20} color="#007AFF" />
-          <Text style={styles.actionText}>Help & Support</Text>
-          <Ionicons name="chevron-forward" size={16} color="#ccc" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="shield-checkmark" size={20} color="#007AFF" />
-          <Text style={styles.actionText}>Privacy Policy</Text>
-          <Ionicons name="chevron-forward" size={16} color="#ccc" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.actionButton}>
-          <Ionicons name="document-text" size={20} color="#007AFF" />
-          <Text style={styles.actionText}>Terms of Service</Text>
-          <Ionicons name="chevron-forward" size={16} color="#ccc" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.section}>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Ionicons name="log-out" size={20} color="#F44336" />
-          <Text style={styles.logoutText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Savings Management </Text>
-        <Text style={styles.footerText}>© 2025 All rights reserved</Text>
-      </View>
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Savings Management</Text>
+          <Text style={styles.footerText}>© 2025 All rights reserved</Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
