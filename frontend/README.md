@@ -2,7 +2,7 @@
 
 A mobile savings management application built with React Native, Expo, and Redux Toolkit.
 
-## 🚀 Features
+##  Features
 
 - **User Authentication**: Secure login and registration with device verification
 - **Savings Management**: Deposit, withdraw, and track your savings
@@ -10,16 +10,16 @@ A mobile savings management application built with React Native, Expo, and Redux
 - **Real-time Balance**: Live balance updates
 - **Device Security**: Admin-verified device access control
 - **Modern UI**: Clean, intuitive interface with smooth animations
-- **Offline Support**: Secure token storage with AsyncStorage
 
-## 📋 Prerequisites
+
+##  Prerequisites
 
 - Node.js (v16 or higher)
 - npm or yarn
 - Expo CLI (`npm install -g @expo/cli`)
 - iOS Simulator (for iOS development) or Android Studio (for Android development)
 
-## 🛠️ Installation
+##  Installation
 
 1. **Clone the repository**
    ```bash
@@ -52,7 +52,7 @@ A mobile savings management application built with React Native, Expo, and Redux
    npm start
    ```
 
-## 📱 Running the App
+##  Running the App
 
 ### Development Mode
 ```bash
@@ -78,7 +78,7 @@ expo build:ios
 expo build:android
 ```
 
-## 🏗️ Project Structure
+##  Project Structure
 
 ```
 frontend/
@@ -107,30 +107,23 @@ frontend/
 └── .env.example          # Environment variables template
 ```
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 1. **Registration**: User creates account with device ID generation
 2. **Device Verification**: Admin must verify the device
 3. **Login**: User can only access app after device verification
 4. **Secure Storage**: JWT tokens stored securely using Expo SecureStore
 
-## 📡 API Integration
+##  API Integration
 
 The app communicates with the backend API through:
 - **Authentication**: Login, register, profile management
 - **Savings**: Deposit, withdraw, balance, transaction history
 - **Security**: JWT token management and automatic refresh
 
-## 🎨 UI/UX Features
 
-- **Modern Design**: Clean, intuitive interface
-- **Responsive Layout**: Optimized for different screen sizes
-- **Loading States**: Smooth loading indicators
-- **Error Handling**: User-friendly error messages
-- **Pull to Refresh**: Easy data refresh functionality
-- **Quick Actions**: Fast deposit/withdrawal options
 
-## 🔒 Security Features
+##  Security Features
 
 - **Secure Storage**: Tokens stored using Expo SecureStore
 - **Automatic Logout**: Token expiration handling
@@ -138,14 +131,14 @@ The app communicates with the backend API through:
 - **Input Validation**: Client-side form validation
 - **Error Boundaries**: Graceful error handling
 
-## 📊 State Management
+##  State Management
 
 Uses Redux Toolkit for state management:
 - **Auth Slice**: User authentication and profile
 - **Savings Slice**: Balance and transaction management
 - **Persistent Storage**: Automatic state persistence
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Run tests
@@ -158,13 +151,13 @@ npm run test:watch
 npm run test:coverage
 ```
 
-## 📱 Supported Platforms
+##  Supported Platforms
 
 - **iOS**: 11.0+
 - **Android**: API level 21+
 - **Web**: Modern browsers
 
-## 🔧 Development
+##  Development
 
 ### Adding New Features
 
@@ -175,15 +168,9 @@ npm run test:coverage
 5. Update Redux slices in `src/store/slices/`
 6. Write tests for new functionality
 
-### Code Style
 
-- Use TypeScript for type safety
-- Follow React Native best practices
-- Use functional components with hooks
-- Implement proper error handling
-- Add loading states for async operations
 
-## 📦 Dependencies
+##  Dependencies
 
 ### Core Dependencies
 - `expo`: React Native framework
@@ -197,7 +184,7 @@ npm run test:coverage
 - `@types/react`: React types
 - `jest`: Testing framework
 
-## 🚨 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -216,7 +203,7 @@ expo start --dev-client
 expo logs
 ```
 
-## 📝 Environment Variables
+##  Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -224,22 +211,6 @@ expo logs
 | `EXPO_PUBLIC_APP_NAME` | App name | Credit Jambo |
 | `EXPO_PUBLIC_APP_VERSION` | App version | 1.0.0 |
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Ensure all tests pass
-6. Submit a pull request
 
-## 📄 License
 
-This project is licensed under the ISC License.
-
-## 📞 Support
-
-For support and questions:
-- Check the documentation
-- Review existing issues
-- Create a new issue with detailed description

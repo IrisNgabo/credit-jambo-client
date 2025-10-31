@@ -2,7 +2,7 @@
 
 A secure savings management API built with Node.js, Express.js, and PostgreSQL.
 
-## 🚀 Features
+##  Features
 
 - **User Authentication**: SHA-512 password hashing with JWT tokens
 - **Device Verification**: Admin-verified device access control
@@ -12,13 +12,13 @@ A secure savings management API built with Node.js, Express.js, and PostgreSQL.
 - **API Documentation**: Swagger/OpenAPI documentation
 - **Database**: PostgreSQL with Sequelize ORM
 
-## 📋 Prerequisites
+##  Prerequisites
 
 - Node.js (v14 or higher)
 - PostgreSQL (v12 or higher)
 - npm or yarn
 
-## 🛠️ Installation
+##  Installation
 
 1. **Clone the repository**
    ```bash
@@ -82,20 +82,20 @@ A secure savings management API built with Node.js, Express.js, and PostgreSQL.
    npm start
    ```
 
-## 📚 API Documentation
+##  API Documentation
 
 Once the server is running, visit:
 - **Swagger UI**: http://localhost:4000/api-docs
 - **Health Check**: http://localhost:4000/api/health
 
-## 🔐 Authentication Flow
+##  Authentication Flow
 
 1. **Register**: User creates account with device ID
 2. **Verification**: Admin verifies the device
 3. **Login**: User can only login after device verification
 4. **Access**: All savings operations require verified device
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### Authentication
 - `POST /api/auth/register` - Register new user
@@ -109,7 +109,7 @@ Once the server is running, visit:
 - `GET /api/savings/balance` - Get current balance
 - `GET /api/savings/history` - Get transaction history
 
-## 🧪 Testing
+##  Testing
 
 ```bash
 # Run all tests
@@ -122,7 +122,7 @@ npm run test:watch
 npm run test:coverage
 ```
 
-## 🔒 Security Features
+##  Security Features
 
 - **Password Hashing**: SHA-512 encryption
 - **JWT Tokens**: Stateless authentication
@@ -132,7 +132,7 @@ npm run test:coverage
 - **Helmet**: Security headers
 - **Device Verification**: Admin-controlled access
 
-## 📊 Database Schema
+##  Database Schema
 
 ### Users Table
 - `id` (UUID, Primary Key)
@@ -160,7 +160,7 @@ npm run test:coverage
 - `createdAt` (DateTime)
 - `updatedAt` (DateTime)
 
-## 🚨 Error Handling
+##  Error Handling
 
 The API returns consistent error responses:
 
@@ -172,7 +172,7 @@ The API returns consistent error responses:
 }
 ```
 
-## 🔧 Development
+##  Development
 
 ### Project Structure
 ```
@@ -199,7 +199,7 @@ backend/
 5. Write tests in `tests/`
 6. Update API documentation
 
-## 📝 Environment Variables
+##  Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -214,15 +214,4 @@ backend/
 | `JWT_EXPIRES_IN` | Token expiration | 24h |
 | `CORS_ORIGIN` | Allowed origins | http://localhost:3000 |
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new features
-5. Ensure all tests pass
-6. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the ISC License.
