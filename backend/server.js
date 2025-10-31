@@ -85,15 +85,15 @@ app.use((req, res) => {
 const startServer = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Database connection established successfully.');
+    console.log(' Database connection established successfully.');
     
     // Don't sync database - using existing admin database
     // await sequelize.sync({ alter: true });
-    console.log('✅ Using existing database structure.');
+    console.log('Using existing database structure.');
     
     app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-      console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
+      console.log(`Server running on port ${PORT}`);
+      console.log(`API Documentation: http://localhost:${PORT}/api-docs`);
     });
   } catch (error) {
     console.error('❌ Unable to connect to the database:', error);
